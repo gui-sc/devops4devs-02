@@ -31,6 +31,23 @@ jobs:
     runs-on: ubuntu-latest
     needs: [CI] #faz com que o job só seja executado após o primeiro
     steps:
-      - name: step1
-        run: echo "Deploy"
-        
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+      #configurar credenciais da aws
+      - name: aws configure
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: KubeConfig configure
+        run: aws eks update-kubeconfig --name nomecluster
+
+      - name: Deploy to kubernetes
+        uses: Azure/k8s-deploy@v5.0.0
+        with:
+          manifests: |
+            ./k8s/deployment.yaml
+          images: |
+            guilhermesilveiradev/review-filmes:v${{ github.run_number }}
