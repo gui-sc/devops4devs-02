@@ -8,6 +8,16 @@ jobs:
   CI:
     runs-on: ubuntu-latest #define linux como runner
     steps:
+      - name: Checkout #essa action traz todo o código pra dentro do runner, ele n fica disponível por padrão
+        uses: actions/checkout@v4.1.7 #usa outra action criada em outro repositório
+        #with: esse comando é para passar argumentos pra action
+
+      - name: Docker Login
+        uses: docker/login-action@v3.2.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: step1
         run: echo "Construir a imagem"
       - name: step2
