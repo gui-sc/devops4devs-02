@@ -10,7 +10,6 @@ jobs:
     steps:
       - name: Checkout #essa action traz todo o código pra dentro do runner, ele n fica disponível por padrão
         uses: actions/checkout@v4.1.7 #usa outra action criada em outro repositório
-        #with: esse comando é para passar argumentos pra action
 
       - name: Docker Login
         uses: docker/login-action@v3.2.0
@@ -21,7 +20,7 @@ jobs:
       - name: Docker Build and push
         uses: docker/build-push-action@v6.2.0
         with:
-          context: .
+          context: ./src
           push: true
           file: ./src/Review-Filmes.Web/Dockerfile
           tags: |
